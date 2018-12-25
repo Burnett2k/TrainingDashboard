@@ -5,7 +5,7 @@ Useful link for api: https://developers.strava.com/playground/
 link to let user authorize: https://www.strava.com/oauth/authorize?client_id=31073&response_type=code&redirect_uri=http://localhost&approval_prompt=force
 
 
-Ideas behind the app:
+## Ideas behind the app:
 * Provide a dashboard that tracks progress towards training for a Century ride
 * Most metrics would be based upon some kind of training regimen I agree to take on in order to prepare for the goal
 
@@ -30,3 +30,13 @@ aggregate or query data based upon the date
 
 ## Things to resolve
 * how can I pull metrics by date?
+* can I just authenticate on the server? This doesn't need to be public for now
+
+## How to Run
+1. clone the repository to your local machine
+2. install dependencies
+```
+npm install
+```
+3. create a .env file and put the following items inside
+4. npm start
