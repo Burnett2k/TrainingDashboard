@@ -1,24 +1,14 @@
 const express = require("express");
-const axios = require("axios");
 const app = express();
+const routes = require("./routes");
+const auth = require("./routes/auth");
+
 require("dotenv").config();
 const port = 3000;
-const mock = true;
-
-const authorizeUrl = `https://www.strava.com/oauth/authorize?client_id=${
-  process.env.CLIENT_ID
-}&response_type=code&redirect_uri=http://127.0.0.1:3000&scope=activity:read_all&approval_prompt=force`;
-
-const initialCall = `https://www.strava.com/api/v3/athletes/${
-  process.env.ATHLETE_ID
-}?access_token=${process.env.TOKEN}`;
-
-const statsCall = `https://www.strava.com/api/v3/athletes/${
-  process.env.ATHLETE_ID
-}/stats/?access_token=${process.env.TOKEN}`;
 
 //https://www.strava.com/oauth/authorize?client_id=31073&response_type=code&redirect_uri=http://strava.com&approval_prompt=force
 
+//TODO these need to get moved out into another file quickly
 const stats = {
   biggest_ride_distance: 42823.1,
   biggest_climb_elevation_gain: 255.80000000000007,
@@ -82,77 +72,7 @@ let bearer = {
 let authenticated = false;
 let token = "";
 
-app.get("/", (req, res) => {
-  checkIfAuthenticated();
-  console.log("we are in mocking mode!");
-  console.log(`calling ${authorizeUrl}`);
-
-  if (authenticated) {
-    axios
-      .get(initialCall)
-      .then(function(response) {
-        //console.log(response);
-        res.send(response.data);
-      })
-      .catch(function(err) {
-        console.log(err.message);
-      });
-  }
-
-  if (checkIfAuthenticated) {
-    res.send(
-      "we are now authenticated! localhost:3000/?code=kafdk234234ksdfk234k234"
-    );
-  } else if (req.query.code) {
-    authenticated = true;
-    token = req.query.code;
-
-    res.json({ status: "authenticated!", token });
-  } else {
-    res.json({ authenticate: authorizeUrl });
-  }
-});
-
-function checkIfAuthenticated() {
-  //see if we are authenticated
-  console.log(`authenticated : ${mock}`);
-  if (mock) {
-    return true;
-  } else {
-    return false;
-  }
-}
-
-app.get("/stats", (req, res) => {
-  console.log(`calling ${statsCall}`);
-  if (mock) {
-    res.json(stats);
-  } else {
-    axios
-      .get(statsCall, {}, config)
-      .then(function(response) {
-        console.log(response);
-        res.json(response.data);
-      })
-      .catch(function(err) {
-        console.log(err);
-      });
-  }
-});
-
-app.get("/activities", (req, res) => {
-  //todo get sample response for activities
-  const activities2Call = `https://www.strava.com/api/v3/athlete/activities?per_page=30?access_token=${token}`;
-
-  axios
-    .get(activities2Call, {}, config)
-    .then(function(response) {
-      console.log(response);
-      res.json(response.data);
-    })
-    .catch(function(err) {
-      console.log(err);
-    });
-});
+app.use("/login", auth);
+app.use("/", routes);
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));
