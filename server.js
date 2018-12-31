@@ -4,7 +4,7 @@ const routes = require("./routes/index");
 const auth = require("./routes/auth");
 
 require("dotenv").config();
-const port = 3000;
+const port = process.env.PORT || 3000;
 
 //https://www.strava.com/oauth/authorize?client_id=31073&response_type=code&redirect_uri=http://strava.com&approval_prompt=force
 
