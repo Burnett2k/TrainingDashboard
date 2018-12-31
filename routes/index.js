@@ -1,5 +1,5 @@
 const router = require("express").Router();
-const mock = true;
+const mock = false;
 const axios = require("axios");
 
 //todo create a consts file?
@@ -11,9 +11,13 @@ const initialCall = `https://www.strava.com/api/v3/athletes/${
   process.env.ATHLETE_ID
 }?access_token=${process.env.TOKEN}`;
 
-const statsCall = `https://www.strava.com/api/v3/athletes/${
-  process.env.ATHLETE_ID
-}/stats/?access_token=${process.env.TOKEN}`;
+let config = {
+  headers: { accept: "application/json" }
+};
+
+let bearer = {
+  headers: { authorization: "Bearer " }
+};
 
 const stats = {
   biggest_ride_distance: 42823.1,
@@ -68,7 +72,9 @@ const athlete = {
 };
 
 router.get("/", (req, res) => {
-  console.log("we are in mocking mode!");
+  let authorizeUrl = `https://www.strava.com/oauth/authorize?client_id=${
+    process.env.CLIENT_ID
+  }&response_type=code&redirect_uri=http://127.0.0.1:3000&scope=activity:read_all&approval_prompt=force`;
   console.log(`calling ${authorizeUrl}`);
 
   if (checkIfAuthenticated()) {
@@ -83,7 +89,7 @@ router.get("/", (req, res) => {
       });
   }
 
-  if (checkIfAuthenticated) {
+  if (checkIfAuthenticated()) {
     res.send(
       "we are now authenticated! localhost:3000/?code=kafdk234234ksdfk234k234"
     );
@@ -98,6 +104,9 @@ router.get("/", (req, res) => {
 });
 
 router.get("/stats", (req, res) => {
+  let statsCall = `https://www.strava.com/api/v3/athletes/${
+    process.env.ATHLETE_ID
+  }/stats/?access_token=${process.env.TOKEN}`;
   console.log(`calling ${statsCall}`);
   if (mock) {
     res.json(stats);

@@ -18,9 +18,6 @@ let bearer = {
   headers: { authorization: "Bearer " }
 };
 
-let authenticated = false;
-let token = "";
-
 app.use("/login", auth);
 app.use("/", routes);
 
