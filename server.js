@@ -10,14 +10,6 @@ const port = 3000;
 
 //TODO these need to get moved out into another file quickly
 
-let config = {
-  headers: { accept: "application/json" }
-};
-
-let bearer = {
-  headers: { authorization: "Bearer " }
-};
-
 app.use("/login", auth);
 app.use("/", routes);
 
