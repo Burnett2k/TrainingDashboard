@@ -2,6 +2,7 @@ const router = require("express").Router();
 const mock = false;
 const axios = require("axios");
 let token = "";
+
 //todo create a consts file?
 const authorizeUrl = `https://www.strava.com/oauth/authorize?client_id=${
   process.env.CLIENT_ID
@@ -131,7 +132,6 @@ router.get("/athlete", (req, res) => {
       res.json(response.data);
     })
     .catch(function(err) {
-      //console.log(err);
       res.json(err.message);
     });
 });
