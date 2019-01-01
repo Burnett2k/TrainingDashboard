@@ -4,6 +4,22 @@ Useful link for api: https://developers.strava.com/playground/
 
 link to let user authorize: https://www.strava.com/oauth/authorize?client_id=31073&response_type=code&redirect_uri=http://localhost&approval_prompt=force
 
+## Authentication process
+
+- Using Stravas OAuth2 implementation
+
+Process is:
+
+1. Redirect user to oauth URL to sign into Strava and give api access to their account
+2. Strava app redirects back to URL the client provides with an auth code
+3. The server sends a POST call to Strava for an access token using the auth code from above
+4. If the auth code and other parameters are good, Strava will give you an auth token and refresh URL
+5. You can then call the API as long as you have the right access. Add the access_token as a header like so:
+
+```
+Authorization: Bearer <insert access token here>
+```
+
 ## Ideas behind the app:
 
 - Provide a dashboard that tracks progress towards training for a Century ride
