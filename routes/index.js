@@ -71,7 +71,7 @@ const athlete = {
 router.get("/", (req, res) => {
   let authorizeUrl = `https://www.strava.com/oauth/authorize?client_id=${
     process.env.CLIENT_ID
-  }&response_type=code&redirect_uri=http://127.0.0.1:3000&scope=activity:read_all&approval_prompt=force`;
+  }&response_type=code&redirect_uri=http://127.0.0.1:3000&scope=activity:read_all&approval_prompt=auto`;
   console.log(`calling ${authorizeUrl}`);
   console.log(`token ${token}`);
 
@@ -83,7 +83,8 @@ router.get("/", (req, res) => {
   //       res.json(response.data);
   //     })
   //     .catch(function(err) {
-  //       res.json(err);
+  //             res.status(500);
+  //              res.json({ error: err.message });
   //     });
   // }
 
@@ -110,10 +111,11 @@ router.get("/", (req, res) => {
         token = response.data.access_token;
       })
       .catch(function(err) {
-        res.send(err);
+        res.status(500);
+        res.json({ error: err.message });
       });
 
-    res.json({ status: "code from redirect!", authCode });
+    res.json({ "code from redirect!": authCode });
   } else {
     res.json({ authenticate: authorizeUrl });
   }
@@ -132,7 +134,8 @@ router.get("/athlete", (req, res) => {
       res.json(response.data);
     })
     .catch(function(err) {
-      res.json(err.message);
+      res.status(500);
+      res.json({ error: err.message });
     });
 });
 
@@ -142,7 +145,7 @@ router.get("/stats", (req, res) => {
   }
 
   let bearer = {
-    headers: { authorization: "Bearer ${token}" }
+    headers: { authorization: `Bearer ${token}` }
   };
 
   let statsCall = `https://www.strava.com/api/v3/athletes/${
@@ -159,23 +162,29 @@ router.get("/stats", (req, res) => {
         res.json(response.data);
       })
       .catch(function(err) {
-        res.send(err);
+        res.status(500);
+        res.json({ error: err.message });
       });
   }
 });
 
 router.get("/activities", (req, res) => {
   //todo get sample response for activities
-  const activities2Call = `https://www.strava.com/api/v3/athlete/activities?per_page=30?access_token=${token}`;
+  const activities2Call = `https://www.strava.com/api/v3/athlete/activities?per_page=30`;
+
+  let bearer = {
+    headers: { authorization: `Bearer ${token}` }
+  };
 
   axios
-    .get(activities2Call, config)
+    .get(activities2Call, bearer)
     .then(function(response) {
       console.log(response);
       res.json(response.data);
     })
     .catch(function(err) {
-      console.log(err);
+      res.status(500);
+      res.json({ error: err.message });
     });
 });
 
