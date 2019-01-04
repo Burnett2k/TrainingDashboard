@@ -122,6 +122,11 @@ router.get("/", (req, res) => {
 });
 
 router.get("/athlete", (req, res) => {
+  if (!token) {
+    res.send("we are not authenticated yet");
+    return;
+  }
+
   let athleteUrl = "https://www.strava.com/api/v3/athlete";
 
   let bearer = {
@@ -142,6 +147,7 @@ router.get("/athlete", (req, res) => {
 router.get("/stats", (req, res) => {
   if (!token) {
     res.send("we are not authenticated yet");
+    return;
   }
 
   let bearer = {
@@ -152,6 +158,7 @@ router.get("/stats", (req, res) => {
     process.env.ATHLETE_ID
   }/stats`;
   console.log(`calling ${statsCall}`);
+
   if (mock) {
     res.json(stats);
   } else {
@@ -169,6 +176,11 @@ router.get("/stats", (req, res) => {
 });
 
 router.get("/activities", (req, res) => {
+  if (!token) {
+    res.send("we are not authenticated yet");
+    return;
+  }
+
   //todo get sample response for activities
   const activities2Call = `https://www.strava.com/api/v3/athlete/activities?per_page=30`;
 
