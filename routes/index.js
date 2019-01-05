@@ -3,19 +3,6 @@ const mock = false;
 const axios = require("axios");
 let token = "";
 
-//todo create a consts file?
-const authorizeUrl = `https://www.strava.com/oauth/authorize?client_id=${
-  process.env.CLIENT_ID
-}&response_type=code&redirect_uri=http://127.0.0.1:3000&scope=read_all,activity:read_all&approval_prompt=auto`;
-
-const initialCall = `https://www.strava.com/api/v3/athletes/${
-  process.env.ATHLETE_ID
-}`;
-
-let config = {
-  headers: { accept: "application/json" }
-};
-
 const stats = {
   biggest_ride_distance: 42823.1,
   biggest_climb_elevation_gain: 255.80000000000007,
@@ -69,11 +56,9 @@ const athlete = {
 };
 
 router.get("/", (req, res) => {
-  let authorizeUrl = `https://www.strava.com/oauth/authorize?client_id=${
-    process.env.CLIENT_ID
-  }&response_type=code&redirect_uri=http://127.0.0.1:3000&scope=activity:read_all&approval_prompt=auto`;
-  console.log(`calling ${authorizeUrl}`);
-  console.log(`token ${token}`);
+  // let authorizeUrl = `https://www.strava.com/oauth/authorize?client_id=${
+  //   process.env.CLIENT_ID
+  // }&response_type=code&redirect_uri=http://127.0.0.1:3000&scope=activity:read_all&approval_prompt=auto`;
 
   // if (checkIfAuthenticated()) {
   //   axios
@@ -88,37 +73,33 @@ router.get("/", (req, res) => {
   //     });
   // }
 
-  if (checkIfAuthenticated()) {
-    res.send(
-      "we are now authenticated! localhost:3000/?code=kafdk234234ksdfk234k234"
-    );
-  } else if (req.query.code) {
-    let authCode = req.query.code;
+  // if (checkIfAuthenticated()) {
+  //   res.send(
+  //     "we are now authenticated! localhost:3000/?code=kafdk234234ksdfk234k234"
+  //   );
+  // } else if (req.query.code) {
 
-    let url = `https://www.strava.com/oauth/token?client_id=${
-      process.env.CLIENT_ID
-    }&client_secret=${
-      process.env.CLIENT_SECRET
-    }&code=${authCode}&grant_type=authorization_code`;
+  let url = `https://www.strava.com/oauth/token?client_id=${
+    process.env.CLIENT_ID
+  }&client_secret=${process.env.CLIENT_SECRET}&code=${
+    process.env.RESPONSE_CODE
+  }&grant_type=authorization_code`;
 
-    console.log(`got code, now calling ${url}`);
+  console.log(`got code, now calling ${url}`);
 
-    axios
-      .post(url)
-      .then(function(response) {
-        authenticated = true;
-        console.log("we are authenticated!");
-        token = response.data.access_token;
-      })
-      .catch(function(err) {
-        res.status(500);
-        res.json({ error: err.message });
-      });
+  axios
+    .post(url)
+    .then(function(response) {
+      authenticated = true;
+      console.log("we are authenticated!");
+      token = response.data.access_token;
+    })
+    .catch(function(err) {
+      res.status(500);
+      res.json({ error: err.message });
+    });
 
-    res.json({ "code from redirect!": authCode });
-  } else {
-    res.json({ authenticate: authorizeUrl });
-  }
+  res.send("we are authenticated now! ");
 });
 
 router.get("/athlete", (req, res) => {
