@@ -59,8 +59,6 @@ router.get("/", (req, res) => {
   // let authorizeUrl = `https://www.strava.com/oauth/authorize?client_id=${
   //   process.env.CLIENT_ID
   // }&response_type=code&redirect_uri=http://127.0.0.1:3000&scope=activity:read_all&approval_prompt=auto`;
-
-  // if (checkIfAuthenticated()) {
   //   axios
   //     .get(initialCall)
   //     .then(function(response) {
@@ -72,34 +70,7 @@ router.get("/", (req, res) => {
   //              res.json({ error: err.message });
   //     });
   // }
-
-  // if (checkIfAuthenticated()) {
-  //   res.send(
-  //     "we are now authenticated! localhost:3000/?code=kafdk234234ksdfk234k234"
-  //   );
-  // } else if (req.query.code) {
-
-  let url = `https://www.strava.com/oauth/token?client_id=${
-    process.env.CLIENT_ID
-  }&client_secret=${process.env.CLIENT_SECRET}&code=${
-    process.env.RESPONSE_CODE
-  }&grant_type=authorization_code`;
-
-  console.log(`got code, now calling ${url}`);
-
-  axios
-    .post(url)
-    .then(function(response) {
-      authenticated = true;
-      console.log("we are authenticated!");
-      token = response.data.access_token;
-    })
-    .catch(function(err) {
-      res.status(500);
-      res.json({ error: err.message });
-    });
-
-  res.send("we are authenticated now! ");
+  //todo this route now does nothing so it will need to be updated. so much garbage code!
 });
 
 router.get("/athlete", (req, res) => {
