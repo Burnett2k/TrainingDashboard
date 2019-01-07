@@ -27,7 +27,11 @@ function authenticate() {
     .post(url)
     .then(function(response) {
       authenticated = true;
-      console.log("we are authenticated!");
+      console.log(
+        `we are authenticated! token = ${response.data.access_token}`
+      );
+
+      //Here we are setting a global variable for the token value so that it can be used for Strava Api requests in any file
       global.token = response.data.access_token;
     })
     .catch(function(err) {});
