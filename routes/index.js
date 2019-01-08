@@ -1,7 +1,6 @@
 const router = require("express").Router();
 const mock = false;
 const axios = require("axios");
-let token = "";
 
 const stats = {
   biggest_ride_distance: 42823.1,
@@ -56,9 +55,9 @@ const athlete = {
 };
 
 router.get("/", (req, res) => {
-  // let authorizeUrl = `https://www.strava.com/oauth/authorize?client_id=${
-  //   process.env.CLIENT_ID
-  // }&response_type=code&redirect_uri=http://127.0.0.1:3000&scope=activity:read_all&approval_prompt=auto`;
+  let authorizeUrl = `https://www.strava.com/oauth/authorize?client_id=${
+    process.env.CLIENT_ID
+  }&response_type=code&redirect_uri=http://127.0.0.1:3000&scope=activity:read_all&approval_prompt=auto`;
   //   axios
   //     .get(initialCall)
   //     .then(function(response) {
@@ -71,10 +70,16 @@ router.get("/", (req, res) => {
   //     });
   // }
   //todo this route now does nothing so it will need to be updated. so much garbage code!
+
+  if (global.token) {
+    res.json({ status: "we are authenticated!" });
+  } else {
+    res.json({ url: authorizeUrl });
+  }
 });
 
 router.get("/athlete", (req, res) => {
-  if (!token) {
+  if (!global.token) {
     res.send("we are not authenticated yet");
     return;
   }
@@ -82,7 +87,7 @@ router.get("/athlete", (req, res) => {
   let athleteUrl = "https://www.strava.com/api/v3/athlete";
 
   let bearer = {
-    headers: { Authorization: `Bearer ${token}` }
+    headers: { Authorization: `Bearer ${global.token}` }
   };
 
   axios
@@ -97,13 +102,13 @@ router.get("/athlete", (req, res) => {
 });
 
 router.get("/stats", (req, res) => {
-  if (!token) {
+  if (!global.token) {
     res.send("we are not authenticated yet");
     return;
   }
 
   let bearer = {
-    headers: { authorization: `Bearer ${token}` }
+    headers: { authorization: `Bearer ${global.token}` }
   };
 
   let statsCall = `https://www.strava.com/api/v3/athletes/${
@@ -128,7 +133,7 @@ router.get("/stats", (req, res) => {
 });
 
 router.get("/activities", (req, res) => {
-  if (!token) {
+  if (!global.token) {
     res.send("we are not authenticated yet");
     return;
   }
@@ -137,7 +142,7 @@ router.get("/activities", (req, res) => {
   const activities2Call = `https://www.strava.com/api/v3/athlete/activities?per_page=30`;
 
   let bearer = {
-    headers: { authorization: `Bearer ${token}` }
+    headers: { authorization: `Bearer ${global.token}` }
   };
 
   axios
@@ -156,7 +161,7 @@ function checkIfAuthenticated() {
   //see if we are authenticated
   if (mock) {
     return true;
-  } else if (token) {
+  } else if (global.token) {
     return true;
   } else {
     return false;
