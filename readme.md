@@ -65,5 +65,18 @@ Authorization: Bearer <insert access token here>
 npm install
 ```
 
-3. create a .env file and put the following items inside
+If you don't want to be prompted to authenticate everytime you run the app, you can run in development mode.
+
+To do this, create a file named **.env** in the root of the project with the following values
+
+```
+TOKEN=<provided when you create the app in Stava>
+REFRESH_TOKEN=<provided when you create the app in Strava>
+ATHLETE_ID=<your athlete id>
+CLIENT_ID=<client id of the app created with Strava>
+CLIENT_SECRET=<client secret of the app created with Stava>
+REDIRECT_URI=<whatever redirect URI you want to hit when calling Strava's Oauth provider>
+RESPONSE_CODE=<the code you receive from strava after redirect URI is called. This can be used to bypass the authorization prompt>
+```
+
 4. npm start
