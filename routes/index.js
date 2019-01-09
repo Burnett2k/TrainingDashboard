@@ -55,26 +55,10 @@ const athlete = {
 };
 
 router.get("/", (req, res) => {
-  let authorizeUrl = `https://www.strava.com/oauth/authorize?client_id=${
-    process.env.CLIENT_ID
-  }&response_type=code&redirect_uri=http://127.0.0.1:3000&scope=activity:read_all&approval_prompt=auto`;
-  //   axios
-  //     .get(initialCall)
-  //     .then(function(response) {
-  //       //console.log(response);
-  //       res.json(response.data);
-  //     })
-  //     .catch(function(err) {
-  //             res.status(500);
-  //              res.json({ error: err.message });
-  //     });
-  // }
-  //todo this route now does nothing so it will need to be updated. so much garbage code!
-
   if (global.token) {
     res.json({ status: "we are authenticated!" });
   } else {
-    res.sendfile("public/index.html");
+    res.sendFile("public/index.html");
   }
 });
 
