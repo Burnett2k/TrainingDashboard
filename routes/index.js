@@ -74,7 +74,7 @@ router.get("/", (req, res) => {
   if (global.token) {
     res.json({ status: "we are authenticated!" });
   } else {
-    res.json({ url: authorizeUrl });
+    res.sendfile("public/index.html");
   }
 });
 
