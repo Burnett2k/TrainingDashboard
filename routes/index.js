@@ -1,6 +1,7 @@
 const router = require("express").Router();
 const mock = false;
 const axios = require("axios");
+const path = require("path");
 
 const stats = {
   biggest_ride_distance: 42823.1,
@@ -56,9 +57,9 @@ const athlete = {
 
 router.get("/", (req, res) => {
   if (global.token) {
-    res.json({ status: "we are authenticated!" });
+    res.sendFile(path.join(__dirname, "../public", "welcome.html"));
   } else {
-    res.sendFile("public/index.html");
+    res.sendFile(path.join(__dirname, "../public", "index.html"));
   }
 });
 
