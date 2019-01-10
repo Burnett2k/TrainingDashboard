@@ -107,7 +107,7 @@ router.get("/stats", (req, res) => {
     axios
       .get(statsCall, bearer)
       .then(function(response) {
-        console.log(response);
+        console.log("received a successful response");
         res.json(response.data);
       })
       .catch(function(err) {
@@ -133,7 +133,7 @@ router.get("/activities", (req, res) => {
   axios
     .get(activities2Call, bearer)
     .then(function(response) {
-      console.log(response);
+      console.log("received a successful response");
       res.json(response.data);
     })
     .catch(function(err) {
