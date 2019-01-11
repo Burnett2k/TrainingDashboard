@@ -74,6 +74,11 @@ router.get("/activities", (req, res) => {
   //need to generate epoch timestamp for previous Sunday morning to get current week's miles
   after = 1545264000;
 
+  var prevSunday = new Date();
+  prevSunday.setDate(prevSunday.getDate() - ((prevSunday.getDay() + 7) % 7));
+
+  after = prevSunday.getTime() / 1000;
+
   //todo get sample response for activities
   const activities2Call = `https://www.strava.com/api/v3/athlete/activities?per_page=30&after=${after}`;
 
