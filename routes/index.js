@@ -71,12 +71,8 @@ router.get("/activities", (req, res) => {
     return;
   }
 
-  //need to generate epoch timestamp for previous Sunday morning to get current week's miles
-  after = 1545264000;
-
-  var prevSunday = new Date();
+  let prevSunday = new Date();
   prevSunday.setDate(prevSunday.getDate() - ((prevSunday.getDay() + 7) % 7));
-
   after = prevSunday.getTime() / 1000;
 
   //todo get sample response for activities
