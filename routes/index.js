@@ -71,8 +71,11 @@ router.get("/activities", (req, res) => {
     return;
   }
 
+  //need to generate epoch timestamp for previous Sunday morning to get current week's miles
+  after = 1545264000;
+
   //todo get sample response for activities
-  const activities2Call = `https://www.strava.com/api/v3/athlete/activities?per_page=30`;
+  const activities2Call = `https://www.strava.com/api/v3/athlete/activities?per_page=30&after=${after}`;
 
   let bearer = {
     headers: { authorization: `Bearer ${global.token}` }
@@ -82,13 +85,21 @@ router.get("/activities", (req, res) => {
     .get(activities2Call, bearer)
     .then(function(response) {
       console.log("received a successful response");
-      res.json(response.data);
+      res.json(summarizeDistance(response.data));
     })
     .catch(function(err) {
       res.status(500);
       res.json({ error: err.message });
     });
 });
+
+function summarizeDistance(data) {
+  let count = 0;
+  for (let i = 0; i < data.length; i++) {
+    count += data[i].distance;
+  }
+  return { totalMiles: count * 0.000621371192 };
+}
 
 function checkIfAuthenticated() {
   //see if we are authenticated
