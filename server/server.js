@@ -10,6 +10,7 @@ require("dotenv").config();
 //add in routes
 app.use("/", routes);
 
+//attempt to authenticate with Strava if environment variables are set
 auth.authenticate();
 
 function generateWeeksOfYear() {
@@ -24,7 +25,7 @@ function generateWeeksOfYear() {
 }
 
 //adding in 404 error as a fallback if no other routes are hit
-app.get("*", function(req, res) {
+app.get("*", (req, res) => {
   res.status(404);
   if (req.accepts("json")) {
     res.send({ error: "Not found" });
