@@ -71,12 +71,15 @@ router.get("/activities", (req, res) => {
     return;
   }
 
+  let beginningOfYear = new Date(new Date().getFullYear(), 0, 1);
   let prevSunday = new Date();
   prevSunday.setDate(prevSunday.getDate() - ((prevSunday.getDay() + 7) % 7));
   after = prevSunday.getTime() / 1000;
 
+  beginningOfYear = beginningOfYear.getTime() / 1000;
+
   //todo get sample response for activities
-  const activities2Call = `https://www.strava.com/api/v3/athlete/activities?per_page=30&after=${after}`;
+  const activities2Call = `https://www.strava.com/api/v3/athlete/activities?per_page=30&after=${beginningOfYear}`;
 
   let bearer = {
     headers: { authorization: `Bearer ${global.token}` }
