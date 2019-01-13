@@ -1,4 +1,4 @@
-function generateWeeksOfYear() {
+function generateWeeksOfYear(data) {
   //goal: generate a list of sums of miles ridden separated by week.
   //Ex: week 1 (1/1 - 1/6) : 22
   //Ex: week 2 (1/7 - 1/13) : 39
@@ -7,4 +7,21 @@ function generateWeeksOfYear() {
   // and then loop through all of it to summarize it.
   //the second option would require fewer network requests, so it is probably for the best
   //todo, HTTP call to get data for the entire year, Loop through the data and summarize each entry into what week it fits in.
+}
+
+function generateWeeklyData() {}
+
+function generateDailyData() {}
+
+function createObjectWithDates(type) {
+  switch (type) {
+    case "daily":
+      break;
+    case "weekly":
+      break;
+    case "monthly":
+      break;
+    default:
+      break;
+  }
 }
