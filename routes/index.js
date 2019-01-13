@@ -80,14 +80,14 @@ router.get("/activities", (req, res) => {
   beginningOfYear = beginningOfYear.getTime() / 1000;
 
   //todo get sample response for activities
-  const activities2Call = `https://www.strava.com/api/v3/athlete/activities?per_page=30&after=${beginningOfYear}`;
+  const activitiesCall = `https://www.strava.com/api/v3/athlete/activities?per_page=30&after=${beginningOfYear}`;
 
   let bearer = {
     headers: { authorization: `Bearer ${global.token}` }
   };
 
   axios
-    .get(activities2Call, bearer)
+    .get(activitiesCall, bearer)
     .then(function(response) {
       console.log("received a successful response");
 
@@ -103,21 +103,6 @@ router.get("/activities", (req, res) => {
       res.json({ error: err.message });
     });
 });
-
-function summarizeDistance(data) {
-  let totalDistance = 0;
-  let totalElevation = 0;
-  const totalRides = data.length;
-  for (let i = 0; i < data.length; i++) {
-    totalDistance += data[i].distance;
-    totalElevation += data[i].total_elevation_gain;
-  }
-  return {
-    totalMiles: totalDistance * 0.000621371192,
-    totalRides,
-    totalElevation
-  };
-}
 
 function checkIfAuthenticated() {
   //see if we are authenticated
