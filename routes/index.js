@@ -98,11 +98,18 @@ router.get("/activities", (req, res) => {
 });
 
 function summarizeDistance(data) {
-  let count = 0;
+  let totalDistance = 0;
+  let totalElevation = 0;
+  const totalRides = data.length;
   for (let i = 0; i < data.length; i++) {
-    count += data[i].distance;
+    totalDistance += data[i].distance;
+    totalElevation += data[i].total_elevation_gain;
   }
-  return { totalMiles: count * 0.000621371192 };
+  return {
+    totalMiles: totalDistance * 0.000621371192,
+    totalRides,
+    totalElevation
+  };
 }
 
 function checkIfAuthenticated() {
