@@ -90,7 +90,13 @@ router.get("/activities", (req, res) => {
     .get(activities2Call, bearer)
     .then(function(response) {
       console.log("received a successful response");
-      res.json(summarizeDistance(response.data));
+
+      const json = core.createObjectWithDates(
+        req.query.interval,
+        response.data
+      );
+
+      res.json(json);
     })
     .catch(function(err) {
       res.status(500);

@@ -16,7 +16,7 @@ module.exports = {
 
   generateDailyData: function() {},
 
-  createObjectWithDates: function(type) {
+  createObjectWithDates: function(type, payload) {
     switch (type) {
       case "daily":
         break;
@@ -25,7 +25,24 @@ module.exports = {
       case "monthly":
         break;
       default:
+        console.log("no querystring parameter added! defaulting to blah");
         break;
     }
+    return summarizeDistance(payload);
   }
 };
+
+function summarizeDistance(data) {
+  let totalDistance = 0;
+  let totalElevation = 0;
+  const totalRides = data.length;
+  for (let i = 0; i < data.length; i++) {
+    totalDistance += data[i].distance;
+    totalElevation += data[i].total_elevation_gain;
+  }
+  return {
+    totalMiles: totalDistance * 0.000621371192,
+    totalRides,
+    totalElevation
+  };
+}
