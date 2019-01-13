@@ -2,6 +2,7 @@ const router = require("express").Router();
 const mock = false;
 const axios = require("axios");
 const path = require("path");
+const core = require("../core/stats");
 
 router.get("/", (req, res) => {
   if (global.token) {
