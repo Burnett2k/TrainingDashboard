@@ -3,6 +3,7 @@ const mock = false;
 const axios = require("axios");
 const path = require("path");
 const core = require("../core/stats");
+const httpHelper = require("../core/httpHelper");
 
 router.get("/", (req, res) => {
   if (global.token) {
@@ -20,16 +21,12 @@ router.get("/athlete", (req, res) => {
 
   let athleteUrl = "https://www.strava.com/api/v3/athlete";
 
-  let bearer = {
-    headers: { Authorization: `Bearer ${global.token}` }
-  };
-
   axios
-    .get(athleteUrl, bearer)
-    .then(function(response) {
+    .get(athleteUrl, httpHelper.createHeader())
+    .then(response => {
       res.json(response.data);
     })
-    .catch(function(err) {
+    .catch(err => {
       res.status(500);
       res.json({ error: err.message });
     });
@@ -41,10 +38,6 @@ router.get("/stats", (req, res) => {
     return;
   }
 
-  let bearer = {
-    headers: { authorization: `Bearer ${global.token}` }
-  };
-
   let statsCall = `https://www.strava.com/api/v3/athletes/${
     process.env.ATHLETE_ID
   }/stats`;
@@ -54,12 +47,12 @@ router.get("/stats", (req, res) => {
     res.json(stats);
   } else {
     axios
-      .get(statsCall, bearer)
-      .then(function(response) {
+      .get(statsCall, httpHelper.createHeader())
+      .then(response => {
         console.log("received a successful response");
         res.json(response.data);
       })
-      .catch(function(err) {
+      .catch(err => {
         res.status(500);
         res.json({ error: err.message });
       });
@@ -82,13 +75,9 @@ router.get("/activities", (req, res) => {
   //todo get sample response for activities
   const activitiesCall = `https://www.strava.com/api/v3/athlete/activities?per_page=30&after=${beginningOfYear}`;
 
-  let bearer = {
-    headers: { authorization: `Bearer ${global.token}` }
-  };
-
   axios
-    .get(activitiesCall, bearer)
-    .then(function(response) {
+    .get(activitiesCall, httpHelper.createHeader())
+    .then(response => {
       console.log("received a successful response");
 
       const json = core.createObjectWithDates(
@@ -98,7 +87,7 @@ router.get("/activities", (req, res) => {
 
       res.json(json);
     })
-    .catch(function(err) {
+    .catch(err => {
       res.status(500);
       res.json({ error: err.message });
     });
