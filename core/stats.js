@@ -17,20 +17,35 @@ module.exports = {
   generateDailyData: function() {},
 
   createObjectWithDates: function(type, payload) {
+    let response = {};
     switch (type) {
       case "daily":
         break;
       case "weekly":
+        response = weeklyDataMock(payload);
         break;
       case "monthly":
         break;
+      case "yearly":
       default:
+        response = summarizeDistance(payload);
         console.log("no querystring parameter added! defaulting to blah");
         break;
     }
-    return summarizeDistance(payload);
+    return response;
   }
 };
+
+//weeks go from Sunday to Saturday typically
+function weeklyDataMock() {
+  return {
+    startDate: "1/1/2019",
+    endDate: "1/6/2019",
+    totalMiles: 82,
+    totalRides: 3,
+    totalElevation: 2012
+  };
+}
 
 function summarizeDistance(data) {
   let totalDistance = 0;
