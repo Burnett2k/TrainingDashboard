@@ -6,15 +6,15 @@ const core = require("../core/stats");
 const httpHelper = require("../core/httpHelper");
 
 router.get("/", (req, res) => {
-  if (global.token) {
-    res.sendFile(path.join(__dirname, "../public", "welcome.html"));
+  if (authenticated()) {
+    res.status(201).sendFile(path.join(__dirname, "../public", "welcome.html"));
   } else {
-    res.sendFile(path.join(__dirname, "../public", "index.html"));
+    res.status(201).sendFile(path.join(__dirname, "../public", "index.html"));
   }
 });
 
 router.get("/athlete", (req, res) => {
-  if (!global.token) {
+  if (!authenticated()) {
     res.send("we are not authenticated yet");
     return;
   }
@@ -33,8 +33,8 @@ router.get("/athlete", (req, res) => {
 });
 
 router.get("/stats", (req, res) => {
-  if (!global.token) {
-    res.send("we are not authenticated yet");
+  if (!authenticated()) {
+    res.status(401).send("we are not authenticated yet");
     return;
   }
 
@@ -44,24 +44,23 @@ router.get("/stats", (req, res) => {
   console.log(`calling ${statsCall}`);
 
   if (mock) {
-    res.json(stats);
+    res.status(201).json(stats);
   } else {
     axios
       .get(statsCall, httpHelper.createHeader())
       .then(response => {
         console.log("received a successful response");
-        res.json(response.data);
+        res.status(201).json(response.data);
       })
       .catch(err => {
-        res.status(500);
-        res.json({ error: err.message });
+        res.status(500).json({ error: err.message });
       });
   }
 });
 
 router.get("/activities", (req, res) => {
-  if (!global.token) {
-    res.send("we are not authenticated yet");
+  if (!authenticated()) {
+    res.status(401).send("we are not authenticated yet");
     return;
   }
 
@@ -85,15 +84,14 @@ router.get("/activities", (req, res) => {
         response.data
       );
 
-      res.json(json);
+      res.status(201).json(json);
     })
     .catch(err => {
-      res.status(500);
-      res.json({ error: err.message });
+      res.status(500).json({ error: err.message });
     });
 });
 
-function checkIfAuthenticated() {
+function authenticated() {
   //see if we are authenticated
   if (mock) {
     return true;
