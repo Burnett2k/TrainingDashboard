@@ -36,8 +36,44 @@ module.exports = {
   }
 };
 
+function addDays(date, days) {
+  var result = new Date(date);
+  result.setDate(result.getDate() + days);
+  return result;
+}
+
+const dayNames = [
+  "Monday",
+  "Tuesday",
+  "Wednesday",
+  "Thursday",
+  "Friday",
+  "Saturday",
+  "Sunday"
+];
+
 //weeks go from Sunday to Saturday typically
 function weeklyDataMock() {
+  let firstDay = new Date("2019-01-01");
+  let startOfWeek = firstDay;
+  const today = new Date();
+
+  let weeks = [];
+
+  //week start with Sunday and then end on Saturday
+  //loop starting at the beginning of the year
+  //first week will be from 1st of the year until the next Saturday
+
+  while (firstDay <= today) {
+    if (firstDay.getDay() === 6) {
+      weeks.push({ startDate: startOfWeek, endDate: firstDay });
+      firstDay = addDays(firstDay, 1);
+      startOfWeek = firstDay;
+    } else {
+      firstDay = addDays(firstDay, 1);
+    }
+  }
+
   return {
     startDate: "1/1/2019",
     endDate: "1/6/2019",
