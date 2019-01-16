@@ -71,7 +71,6 @@ router.get("/activities", (req, res) => {
 
   beginningOfYear = beginningOfYear.getTime() / 1000;
 
-  //todo get sample response for activities
   const activitiesCall = `https://www.strava.com/api/v3/athlete/activities?per_page=30&after=${beginningOfYear}`;
 
   axios
