@@ -53,7 +53,7 @@ const dayNames = [
 ];
 
 //weeks go from Sunday to Saturday typically
-function weeklyDataMock() {
+function weeklyDataMock(payload) {
   let firstDay = new Date("2019-01-01");
   let startOfWeek = firstDay;
   const today = new Date();
@@ -63,24 +63,67 @@ function weeklyDataMock() {
   //week start with Sunday and then end on Saturday
   //loop starting at the beginning of the year
   //first week will be from 1st of the year until the next Saturday
-
+  let weekEstablished = false;
   while (firstDay <= today) {
-    if (firstDay.getDay() === 6) {
+    if (weekEstablished) {
+      console.log("week established");
+      firstDay = addDays(firstDay, 6);
       weeks.push({ startDate: startOfWeek, endDate: firstDay });
-      firstDay = addDays(firstDay, 1);
       startOfWeek = firstDay;
     } else {
-      firstDay = addDays(firstDay, 1);
+      //if we are on a saturday, then add that week to the weeks array and set the start date for the next week
+      if (firstDay.getDay() === 6) {
+        weekEstablished = true;
+        weeks.push({ startDate: startOfWeek, endDate: firstDay });
+        firstDay = addDays(firstDay, 1);
+        startOfWeek = firstDay;
+      } else {
+        //it isn't saturday, so increment by a day
+        firstDay = addDays(firstDay, 1);
+      }
     }
   }
 
+  weeks = summarizeWeeklyDistance(payload, weeks);
+
   return {
-    startDate: "1/1/2019",
-    endDate: "1/6/2019",
-    totalMiles: 82,
-    totalRides: 3,
-    totalElevation: 2012
+    weeks
   };
+}
+
+function summarizeWeeklyDistance(data, weeks) {
+  let totalDistance = 0;
+  let totalElevation = 0;
+  //const totalRides = data.length;
+
+  let j = 1;
+
+  for (var i = 0; i < weeks.length; i++) {
+    let weekStart = weeks[i].startDate;
+    let weekEnd = weeks[i].endDate;
+
+    while (j < data.length) {
+      let rideStartDate = new Date(data[j].start_date);
+
+      if (rideStartDate >= weekStart && rideStartDate <= weekEnd) {
+        //we are still in the same week so continue counting
+        totalDistance += data[i].distance;
+        totalElevation += data[i].total_elevation_gain;
+        j++;
+      } else {
+        //we are in a new week so reset the counters
+
+        weeks[i].totalDistance = totalDistance;
+        weeks[i].totalElevation = totalElevation;
+
+        totalDistance = 0;
+        totalElevation = 0;
+        break;
+      }
+    }
+  }
+
+  return weeks;
 }
 
 function summarizeDistance(data) {
