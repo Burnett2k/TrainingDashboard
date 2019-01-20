@@ -54,10 +54,16 @@ const dayNames = [
 
 //weeks go from Sunday to Saturday typically
 function weeklyDataMock(payload) {
-  let firstDay = new Date("2019-01-01");
-  let startOfWeek = firstDay;
+  //get date for first day of the year (where we begin looping from)
+  let firstDay = new Date("2019-01-01 (MST)"); //.setUTCHours(23, 59, 59, 999);
+
+  //create a variable to store the beginning of the week
+  let startOfWeek = new Date("2019-01-01 (MST)"); //.setUTCHours(0, 0, 0, 0);
+
+  //create a variable to store the current date so we know when to stop looping
   const today = new Date();
 
+  //weeks array will store our js objects with start & end date as well as metrics associated with that date
   let weeks = [];
 
   //week start with Sunday and then end on Saturday
@@ -96,20 +102,31 @@ function summarizeWeeklyDistance(data, weeks) {
   let totalElevation = 0;
   //const totalRides = data.length;
 
-  let j = 1;
+  let j = 0;
 
   for (var i = 0; i < weeks.length; i++) {
     let weekStart = weeks[i].startDate;
     let weekEnd = weeks[i].endDate;
+
+    //initialize to 0
+    weeks[i].totalDistance = 0;
+    weeks[i].distanceUnits = "mi";
+    weeks[i].totalElevation = 0;
+    weeks[i].elevationUnits = "ft";
 
     while (j < data.length) {
       let rideStartDate = new Date(data[j].start_date);
 
       if (rideStartDate >= weekStart && rideStartDate <= weekEnd) {
         //we are still in the same week so continue counting
-        totalDistance += data[i].distance;
+        totalDistance += data[i].distance * 0.000621371192;
         totalElevation += data[i].total_elevation_gain;
         j++;
+
+        if (j === data.length) {
+          weeks[i].totalDistance = totalDistance;
+          weeks[i].totalElevation = totalElevation;
+        }
       } else {
         //we are in a new week so reset the counters
 
