@@ -4,6 +4,7 @@ const axios = require("axios");
 const path = require("path");
 const core = require("../core/stats");
 const httpHelper = require("../core/httpHelper");
+const stats = require("../mocks/stats");
 
 router.get("/", (req, res) => {
   if (authenticated()) {
@@ -65,12 +66,7 @@ router.get("/activities", (req, res) => {
   }
 
   let beginningOfYear = new Date(new Date().getFullYear(), 0, 1);
-  let prevSunday = new Date();
-  prevSunday.setDate(prevSunday.getDate() - ((prevSunday.getDay() + 7) % 7));
-  after = prevSunday.getTime() / 1000;
-
   beginningOfYear = beginningOfYear.getTime() / 1000;
-
   const activitiesCall = `https://www.strava.com/api/v3/athlete/activities?per_page=30&after=${beginningOfYear}`;
 
   axios

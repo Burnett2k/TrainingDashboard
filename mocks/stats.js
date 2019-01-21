@@ -24,3 +24,5 @@ const stats = {
     elevation_gain: 4931
   }
 };
+
+module.exports = stats;

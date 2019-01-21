@@ -18,7 +18,6 @@ module.exports = {
       axios
         .post(url)
         .then(function(response) {
-          authenticated = true;
           console.log(
             `we are authenticated! token = ${response.data.access_token}`
           );
@@ -26,7 +25,9 @@ module.exports = {
           //Here we are setting a global variable for the token value so that it can be used for Strava Api requests in any file
           global.token = response.data.access_token;
         })
-        .catch(function(err) {});
+        .catch(function(err) {
+          console.log(err);
+        });
     } else {
       console.log(
         "We cannot authenticate due to a missing environment variable"
