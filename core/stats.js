@@ -11,7 +11,7 @@ module.exports = {
       case "daily":
         break;
       case "weekly":
-        response = weeklyDataMock(payload);
+        response = generateWeeklyData(payload);
         break;
       case "monthly":
         break;
@@ -32,7 +32,7 @@ function addDays(date, days) {
 }
 
 //weeks go from Sunday to Saturday typically
-function weeklyDataMock(payload) {
+function generateWeeklyData(payload) {
   //get date for first day of the year (where we begin looping from)
   let firstDay = new Date("2019-01-01 (MST)"); //.setUTCHours(23, 59, 59, 999);
 
@@ -54,6 +54,7 @@ function weeklyDataMock(payload) {
       console.log("week established");
       firstDay = addDays(firstDay, 6);
       weeks.push({ startDate: startOfWeek, endDate: firstDay });
+      firstDay = addDays(firstDay, 1);
       startOfWeek = firstDay;
     } else {
       //if we are on a saturday, then add that week to the weeks array and set the start date for the next week
@@ -98,8 +99,8 @@ function summarizeWeeklyDistance(data, weeks) {
 
       if (rideStartDate >= weekStart && rideStartDate <= weekEnd) {
         //we are still in the same week so continue counting
-        totalDistance += data[i].distance * 0.000621371192;
-        totalElevation += data[i].total_elevation_gain;
+        totalDistance += data[j].distance * 0.000621371192;
+        totalElevation += data[j].total_elevation_gain;
         j++;
 
         if (j === data.length) {
