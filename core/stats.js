@@ -80,6 +80,7 @@ function generateWeeklyData(payload) {
 function summarizeWeeklyDistance(data, weeks) {
   let totalDistance = 0;
   let totalElevation = 0;
+  let totalTime = 0;
   //const totalRides = data.length;
 
   let j = 0;
@@ -93,6 +94,8 @@ function summarizeWeeklyDistance(data, weeks) {
     weeks[i].distanceUnits = "mi";
     weeks[i].totalElevation = 0;
     weeks[i].elevationUnits = "ft";
+    weeks[i].totalTime = 0;
+    weeks[i].timeUnits = "seconds";
 
     while (j < data.length) {
       let rideStartDate = new Date(data[j].start_date);
@@ -101,20 +104,24 @@ function summarizeWeeklyDistance(data, weeks) {
         //we are still in the same week so continue counting
         totalDistance += data[j].distance * 0.000621371192;
         totalElevation += data[j].total_elevation_gain;
+        totalTime += data[j].moving_time / 60;
         j++;
 
         if (j === data.length) {
           weeks[i].totalDistance = totalDistance;
           weeks[i].totalElevation = totalElevation;
+          weeks[i].totalTime = totalTime;
         }
       } else {
         //we are in a new week so reset the counters
 
         weeks[i].totalDistance = totalDistance;
         weeks[i].totalElevation = totalElevation;
+        weeks[i].totalTime = totalTime;
 
         totalDistance = 0;
         totalElevation = 0;
+        totalTime = 0;
         break;
       }
     }
