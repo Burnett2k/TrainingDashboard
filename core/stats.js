@@ -81,7 +81,6 @@ function summarizeWeeklyDistance(data, weeks) {
   let totalDistance = 0;
   let totalElevation = 0;
   let totalTime = 0;
-  //const totalRides = data.length;
 
   let j = 0;
 
@@ -95,7 +94,7 @@ function summarizeWeeklyDistance(data, weeks) {
     weeks[i].totalElevation = 0;
     weeks[i].elevationUnits = "ft";
     weeks[i].totalTime = 0;
-    weeks[i].timeUnits = "seconds";
+    weeks[i].timeUnits = "minutes";
 
     while (j < data.length) {
       let rideStartDate = new Date(data[j].start_date);
@@ -114,7 +113,6 @@ function summarizeWeeklyDistance(data, weeks) {
         }
       } else {
         //we are in a new week so reset the counters
-
         weeks[i].totalDistance = totalDistance;
         weeks[i].totalElevation = totalElevation;
         weeks[i].totalTime = totalTime;

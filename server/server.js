@@ -24,4 +24,4 @@ app.get("*", (req, res) => {
   res.type("txt").send("Not found");
 });
 
-app.listen(port, () => console.log(`Example app listening on port ${port}!`));
+app.listen(port, () => console.log(`listening on port ${port}!`));

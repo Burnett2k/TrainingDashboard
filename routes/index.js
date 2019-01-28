@@ -20,16 +20,15 @@ router.get("/athlete", (req, res) => {
     return;
   }
 
-  let athleteUrl = "https://www.strava.com/api/v3/athlete";
+  const athleteUrl = "https://www.strava.com/api/v3/athlete";
 
   axios
     .get(athleteUrl, httpHelper.createHeader())
     .then(response => {
-      res.json(response.data);
+      res.status(201).json(response.data);
     })
     .catch(err => {
-      res.status(500);
-      res.json({ error: err.message });
+      res.status(500).json({ error: err.message });
     });
 });
 
@@ -39,7 +38,7 @@ router.get("/stats", (req, res) => {
     return;
   }
 
-  let statsCall = `https://www.strava.com/api/v3/athletes/${
+  const statsCall = `https://www.strava.com/api/v3/athletes/${
     process.env.ATHLETE_ID
   }/stats`;
   console.log(`calling ${statsCall}`);
@@ -88,9 +87,9 @@ router.get("/activities", (req, res) => {
 
 function authenticated() {
   //see if we are authenticated
-  if (mock) {
+  if (global.token) {
     return true;
-  } else if (global.token) {
+  } else if (mock) {
     return true;
   } else {
     return false;

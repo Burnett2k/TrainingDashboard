@@ -7,7 +7,7 @@ module.exports = {
       process.env.CLIENT_SECRET &&
       process.env.RESPONSE_CODE
     ) {
-      let url = `https://www.strava.com/oauth/token?client_id=${
+      const url = `https://www.strava.com/oauth/token?client_id=${
         process.env.CLIENT_ID
       }&client_secret=${process.env.CLIENT_SECRET}&code=${
         process.env.RESPONSE_CODE
